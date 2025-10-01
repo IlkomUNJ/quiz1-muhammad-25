@@ -3,32 +3,105 @@
 #include "buyer.h"
 
 enum PrimaryPrompt{LOGIN, REGISTER, EXIT};
+enum RegisterPrompt{CREATE_BUYER, CREATE_SELLER, BACK};
+enum LoginPrompt{CHECK_ACCOUNT_STATUS,UPGRADE_ACCOUNT,CREATE_BANK_ACCOUNT,BALIK};
+enum ROLE {BUYER_ROLE, SELLER_ROLE, BOTH_ROLE};
 
 using namespace std;
 
 int main() {
     //create a loop prompt 
     PrimaryPrompt prompt = LOGIN;
+    RegisterPrompt regPrompt = CREATE_BUYER;
+    LoginPrompt logPrompt = CHECK_ACCOUNT_STATUS;
+    ROLE role = BUYER_ROLE;
+
+    string name = "";
+    double balance = 0.0;    
+
     while (prompt != EXIT) {
         cout << "Select an option: " << endl;
         cout << "1. Login" << endl;
         cout << "2. Register" << endl;
         cout << "3. Exit" << endl;
+
+        
+
         int choice;
         cin >> choice;
         prompt = static_cast<PrimaryPrompt>(choice - 1);
         switch (prompt) {
             case LOGIN:
-                cout << "Login selected." << endl;
+                logPrompt = CHECK_ACCOUNT_STATUS;
+                while (logPrompt != BALIK){
+                    cout << "Login selected." << endl;
+                    cout << "Select an option: " << endl;
+                    cout << "1. Check Account Status" << endl;
+                    cout << "2. Upgrade Account to Seller" << endl;
+                    cout << "3. Create Banking Account" << endl;
+                    cout << "4. Back" << endl;
+
+                    int logchoice;
+                    cin >> logchoice;
+                    logPrompt = static_cast <LoginPrompt> (logchoice -1);
+                    switch (logPrompt){
+                        case CHECK_ACCOUNT_STATUS:
+                            cout << "Check Account Status selected" << endl;
+                            switch (role){
+                            case BUYER_ROLE:
+                                cout << "your account is : Buyer" <<endl; 
+                                break;
+                            case SELLER_ROLE :
+                                cout << "your account is : Seller" <<endl; 
+                                break;
+                            case BOTH_ROLE :
+                                cout << "your account is : Seller and Buyer" <<endl; 
+                                break;
+                            default:
+                                break;
+                            }
+                            cout << "name: " << name << endl;
+                            cout << "account id : " << 1 <<endl;
+                            cout << "balance : " << balance <<endl;
+                            break;
+                        
+                        case UPGRADE_ACCOUNT:
+                            cout << "Upgrade Account to Seller selected" << endl;
+                            break;
+                        
+                        case CREATE_BANK_ACCOUNT:
+                            cout << "Create Banking Account selected" << endl;
+                            break;
+                        
+                        case BALIK:
+                            cout << "Back selected" << endl;
+                            logPrompt = BALIK;
+                            break;
+
+                        default:
+                            cout << "Invalid option." << endl;
+                            break;
+                    }
+                }
+                   
+                
+
+
                 /* if Login is selected, based on authority then provide options:
                 assume user is logged in as Buyer for now
+                
+
                 1. Chek Account Status (will display if user is Buyer or Seller or both and linked banking account status)
                 Will display Buyer, Seller and Banking Account details
+
+                --------------
                 2. Upgrade Account to Seller
                 Will prompt user to enter Seller details and create a Seller account linked to Buyer account
                 Will reject if a user dont have a banking account linked
+
                 3. Create Banking Account (if not already linked), will be replaced with banking functions
                 Must provides: initial deposit amount, Address, Phone number, Email
+
                 Banking functions will provides: Balance checking, Transaction History, Deposit, Withdraw
                 4. Browse Store Functionality
                 Will display all stores initially
@@ -72,14 +145,57 @@ int main() {
                 **/
                 break;
             case REGISTER:
-                cout << "Register selected." << endl;
-                /* if register is selected then went throuhh registration process:
-                1. Create a new Buyer Account
-                Must provides: Name, Home Address, Phone number, Email
-                2. Option to create a Seller Account (will be linked to Buyer account)
-                Must provides: Store Name, Store Address, Store Phone number, Store Email
-                After finished immediately logged in as Buyer/Seller
-                */
+                regPrompt = CREATE_BUYER;   
+                while (regPrompt != BACK){
+                    cout << "Register selected." << endl;
+                    cout << "Select an option: " << endl;
+                    cout << "1. Create Buyer Account" << endl;
+                    cout << "2. Create Seller Account " << endl;
+                    cout << "3. Back" << endl;
+                    int regchoice;
+                    cin >> regchoice;
+                    regPrompt = static_cast <RegisterPrompt> (regchoice -1);
+                    switch (regPrompt){
+                        case CREATE_BUYER:
+                            cout << "Create Buyer Account selected" << endl;
+                            cout << "Insert Your Name "<<endl;
+                            cin >> name;
+                            cout <<endl<<"insert your balance" <<endl;
+                            cin>> balance;
+
+                            {
+                                BankCustomer acc1(101, name , balance);
+
+                                
+                                Buyer b1(1, name, acc1);
+            
+                                cout << "your account has been created" <<endl;
+                            }
+                            regPrompt = BACK;
+                            break;
+                        case CREATE_SELLER:
+                            cout << "Create Seller Account selected" << endl;
+                            break;
+                        case BACK:
+                            cout << "Back selected" << endl;
+                            regPrompt = BACK;
+                            break;
+                        default:
+                            cout << "Invalid option." << endl;
+                            break;
+                    }
+                    /* if register is selected then went throuhh registration process:
+
+                    1. Create a new Buyer Account
+                    Must provides: Name, Home Address, Phone number, Email
+
+                    2. Option to create a Seller Account (will be linked to Buyer account)
+                    Must provides: Store Name, Store Address, Store Phone number, Store Email
+                    After finished immediately logged in as Buyer/Seller
+
+                    */
+                    
+                }
                 break;
             case EXIT:
                 cout << "Exiting." << std::endl;
